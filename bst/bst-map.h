@@ -1,6 +1,8 @@
 #ifndef BSTMAP_H
 #define BSTMAP_H
 
+#include <iostream>
+
 namespace CS280 {
 
     template< typename KEY_TYPE, typename VALUE_TYPE >
@@ -101,6 +103,7 @@ namespace CS280 {
 			//do not need this one (why)
 			//BSTmap_iterator_const erase(BSTmap_iterator& it) const;
 
+			char getedgesymbol(const Node* node) const;
 			void print(std::ostream& os, bool print_value = false) const;
 			//bool sanityCheck();
 

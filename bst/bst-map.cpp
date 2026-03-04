@@ -1,7 +1,5 @@
 #include "bst-map.h"
 
-#include <iostream>
-
 // static data members
 template< typename KEY_TYPE, typename VALUE_TYPE >
 typename CS280::BSTmap<KEY_TYPE,VALUE_TYPE>::BSTmap_iterator        
@@ -108,7 +106,37 @@ CS280::BSTmap<KEY_TYPE,VALUE_TYPE>& CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::operato
 
 template< typename KEY_TYPE, typename VALUE_TYPE >
 VALUE_TYPE& CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::operator[](KEY_TYPE const& rhs) {
+	// Empty Tree
+	if (pRoot == nullptr) {
+		size_++;
+		pRoot = new Node(key, VALUE_TYPE(), nullptr, 0, 0, nullptr, nullptr);
+		return pRoot->value;
+	}
 
+	Node* prev = nullptr;
+	Node* node = pRoot;
+
+	while (node != nullptr) {
+		if (node->key < key) {
+			prev = node;
+			node = node->right;
+		}
+		else if (node->key > key) {
+			prev = node;
+			node = node->left;
+
+		}
+		else {
+			return node->value;
+		}
+	}
+	size_++;
+	node = new Node(key, VALUE_TYPE(), prev, 0, 0, nullptr, nullptr);
+	if (prev->key < key)
+		prev->right = node;
+	else
+		prev->left = node;
+	return node->value;
 }
 
 //bstmap_interator
@@ -118,11 +146,42 @@ CS280::BSTmap<KEY_TYPE,VALUE_TYPE>::BSTmap_iterator::BSTmap_iterator(Node* p = n
 {
 }
 
+template< typename KEY_TYPE, typename VALUE_TYPE >
+CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::BSTmap_iterator& CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::BSTmap_iterator::operator=(const BSTmap_iterator& rhs) {
+	BSTmap_iterator it = rhs;
+	return it;
+}
+
+template< typename KEY_TYPE, typename VALUE_TYPE >
+bool CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::BSTmap_iterator::operator!=(const BSTmap_iterator& rhs) {
+
+}
+
+template< typename KEY_TYPE, typename VALUE_TYPE >
+bool CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::BSTmap_iterator::operator==(const BSTmap_iterator& rhs) {
+
+}
+
 //bstmap_interator_const
 template< typename KEY_TYPE, typename VALUE_TYPE >
 CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::BSTmap_iterator_const::BSTmap_iterator_const(Node* p = nullptr) :
 	p_node(p)
 {
+}
+
+template< typename KEY_TYPE, typename VALUE_TYPE >
+CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::BSTmap_iterator_const& CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::BSTmap_iterator_const::operator=(const BSTmap_iterator_const& rhs) {
+	
+}
+
+template< typename KEY_TYPE, typename VALUE_TYPE >
+bool CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::BSTmap_iterator_const::operator!=(const BSTmap_iterator_const& rhs) {
+
+}
+
+template< typename KEY_TYPE, typename VALUE_TYPE >
+bool CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::BSTmap_iterator_const::operator==(const BSTmap_iterator_const& rhs) {
+
 }
 
 ////////////////////////////////////////////////////////////
