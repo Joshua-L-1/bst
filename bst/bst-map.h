@@ -38,12 +38,12 @@ namespace CS280 {
 				private:
 					Node* p_node;
 				public:
-					BSTmap_iterator(Node* p=nullptr);
+					BSTmap_iterator(Node* p = nullptr) : p_node(p) {}
 					BSTmap_iterator& operator=(const BSTmap_iterator& rhs);
 					BSTmap_iterator& operator++();
 					BSTmap_iterator operator++(int);
-                    Node & operator*();
-					Node * operator->();
+                    Node& operator*();
+					Node* operator->();
 					bool operator!=(const BSTmap_iterator& rhs);
                     bool operator==(const BSTmap_iterator& rhs);
 					friend class BSTmap;
@@ -52,7 +52,7 @@ namespace CS280 {
 				private:
 					Node* p_node;
 				public:
-					BSTmap_iterator_const(Node* p=nullptr);
+					BSTmap_iterator_const(Node* p=nullptr) : p_node(p) {}
 					BSTmap_iterator_const& operator=(const BSTmap_iterator_const& rhs);
 					BSTmap_iterator_const& operator++();
 					BSTmap_iterator_const operator++(int);
@@ -103,6 +103,7 @@ namespace CS280 {
 			//do not need this one (why)
 			//BSTmap_iterator_const erase(BSTmap_iterator& it) const;
 
+			int getdepth(const Node* node) const;
 			char getedgesymbol(const Node* node) const;
 			void print(std::ostream& os, bool print_value = false) const;
 			//bool sanityCheck();
@@ -114,7 +115,8 @@ namespace CS280 {
 			friend class BSTmap_iterator;
 			friend class BSTmap_iterator_const;
 		private:
-            // ...
+			void del(Node* node);
+			Node* copy(Node* source_node, Node* parent_ptr);
 	};
 
 	//notice that it doesn't need to be friend
