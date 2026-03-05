@@ -39,7 +39,7 @@ typename CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::Node* CS280::BSTmap<KEY_TYPE, VALU
 //for the node class
 template< typename KEY_TYPE, typename VALUE_TYPE >
 CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::Node::Node(KEY_TYPE k, VALUE_TYPE val, Node* p, int h, int b, Node* l, Node* r) :
-	key(k), value(val), parent(p), height(h), balance(b), left(l), right(r)
+	key(k), value(val), height(h), balance(b), parent(p), left(l), right(r)
 {
 }
 
@@ -101,7 +101,7 @@ typename CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::Node* CS280::BSTmap<KEY_TYPE, VALU
 
 template< typename KEY_TYPE, typename VALUE_TYPE >
 void CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::Node::print(std::ostream& os) const {
-	os << '(' << key << ', ' << value << ')';
+	os << '(' << key << ',' << value << ')';
 }
 
 //start of bstmap implementation
@@ -144,6 +144,11 @@ CS280::BSTmap<KEY_TYPE,VALUE_TYPE>& CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::operato
 }
 
 template< typename KEY_TYPE, typename VALUE_TYPE >
+unsigned int CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::size() {
+	return size_;
+}
+
+template< typename KEY_TYPE, typename VALUE_TYPE >
 VALUE_TYPE& CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::operator[](KEY_TYPE const& rhs) {
 	if (pRoot == nullptr) {
 		size_++;
@@ -151,16 +156,16 @@ VALUE_TYPE& CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::operator[](KEY_TYPE const& rhs)
 		return pRoot->value;
 	}
 
-	Node* prev = nullptr;
+	Node* par = nullptr;
 	Node* node = pRoot;
 
 	while (node != nullptr) {
 		if (node->key < rhs) {
-			prev = node;
+			par = node;
 			node = node->right;
 		}
 		else if (node->key > rhs) {
-			prev = node;
+			par = node;
 			node = node->left;
 
 		}
@@ -168,26 +173,26 @@ VALUE_TYPE& CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::operator[](KEY_TYPE const& rhs)
 			return node->value;
 		}
 	}
-	size_++;
-	node = new Node(rhs, VALUE_TYPE(), prev, 0, 0, nullptr, nullptr);
-	if (prev->key < rhs)
-		prev->right = node;
+	node = new Node(rhs, VALUE_TYPE(), par, 0, 0, nullptr, nullptr);
+	if (par->key < rhs)
+		par->right = node;
 	else
-		prev->left = node;
+		par->left = node;
+	size_++;
 	return node->value;
 }
 
 //bstmap_interator
 template< typename KEY_TYPE, typename VALUE_TYPE >
 typename CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::BSTmap_iterator& CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::BSTmap_iterator::operator=(const BSTmap_iterator& rhs) {
-	p_node = rhs.p_node;
+	this->p_node = rhs.p_node;
 	return *this;
 }
 
 template< typename KEY_TYPE, typename VALUE_TYPE >
 typename CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::BSTmap_iterator& CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::BSTmap_iterator::operator++() {
-	if (p_node != nullptr) {
-		p_node = p_node->increment();
+	if (this->p_node != nullptr) {
+		this->p_node = this->p_node->increment();
 	}
 	return *this;
 }
@@ -211,12 +216,12 @@ typename CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::Node* CS280::BSTmap<KEY_TYPE, VALU
 
 template< typename KEY_TYPE, typename VALUE_TYPE >
 bool CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::BSTmap_iterator::operator!=(const BSTmap_iterator& rhs) {
-	return p_node != rhs.p_node;
+	return this->p_node != rhs.p_node;
 }
 
 template< typename KEY_TYPE, typename VALUE_TYPE >
 bool CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::BSTmap_iterator::operator==(const BSTmap_iterator& rhs) {
-	return p_node == rhs.p_node;
+	return this->p_node == rhs.p_node;
 }
 
 ////////////////////////////////////////////////////////////
@@ -251,11 +256,11 @@ typename CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::BSTmap_iterator CS280::BSTmap<KEY_
 
 template< typename KEY_TYPE, typename VALUE_TYPE >
 void CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::erase(BSTmap_iterator it) {
-	if (it.p_node == nullptr) {
+	Node* node = it.p_node;
+	if (node == nullptr) {
 		return;
 	}
 
-	Node* node = it.p_node;
 	Node* suc = (node->left == nullptr || node->right == nullptr) ? node : node->increment();
 	Node* temp = (suc->left != nullptr) ? suc->left : suc->right;
 
@@ -285,14 +290,14 @@ void CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::erase(BSTmap_iterator it) {
 //bstmap_interator_const
 template< typename KEY_TYPE, typename VALUE_TYPE >
 typename CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::BSTmap_iterator_const& CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::BSTmap_iterator_const::operator=(const BSTmap_iterator_const& rhs) {
-	p_node = rhs.p_node;
+	this->p_node = rhs.p_node;
 	return *this;
 }
 
 template< typename KEY_TYPE, typename VALUE_TYPE >
 typename CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::BSTmap_iterator_const& CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::BSTmap_iterator_const::operator++() {
-	if (p_node != nullptr) {
-		p_node = p_node->increment();
+	if (this->p_node != nullptr) {
+		this->p_node = this->p_node->increment();
 	}
 	return *this;
 }
@@ -316,12 +321,12 @@ typename CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::Node const* CS280::BSTmap<KEY_TYPE
 
 template< typename KEY_TYPE, typename VALUE_TYPE >
 bool CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::BSTmap_iterator_const::operator!=(const BSTmap_iterator_const& rhs) {
-	return p_node != rhs.p_node;
+	return this->p_node != rhs.p_node;
 }
 
 template< typename KEY_TYPE, typename VALUE_TYPE >
 bool CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::BSTmap_iterator_const::operator==(const BSTmap_iterator_const& rhs) {
-	return p_node == rhs.p_node;
+	return this->p_node == rhs.p_node;
 }
 
 template< typename KEY_TYPE, typename VALUE_TYPE >

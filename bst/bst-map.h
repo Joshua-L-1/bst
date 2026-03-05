@@ -39,6 +39,7 @@ namespace CS280 {
 					Node* p_node;
 				public:
 					BSTmap_iterator(Node* p = nullptr) : p_node(p) {}
+					BSTmap_iterator(const BSTmap_iterator&) = default;
 					BSTmap_iterator& operator=(const BSTmap_iterator& rhs);
 					BSTmap_iterator& operator++();
 					BSTmap_iterator operator++(int);
@@ -53,6 +54,7 @@ namespace CS280 {
 					Node* p_node;
 				public:
 					BSTmap_iterator_const(Node* p=nullptr) : p_node(p) {}
+					BSTmap_iterator_const(const BSTmap_iterator_const&) = default;
 					BSTmap_iterator_const& operator=(const BSTmap_iterator_const& rhs);
 					BSTmap_iterator_const& operator++();
 					BSTmap_iterator_const operator++(int);
