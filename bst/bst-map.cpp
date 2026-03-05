@@ -74,10 +74,10 @@ typename CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::Node* CS280::BSTmap<KEY_TYPE, VALU
 template< typename KEY_TYPE, typename VALUE_TYPE >
 typename CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::Node* CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::Node::increment() {
 	if (right != nullptr) {
-		return right->last();
+		return right->first();
 	}
-	Node* node = this->parent;
 	Node* prev = this;
+	Node* node = parent;
 	while (node != nullptr && prev == node->right) {
 		prev = node;
 		node = node->parent;
@@ -90,8 +90,8 @@ typename CS280::BSTmap<KEY_TYPE, VALUE_TYPE>::Node* CS280::BSTmap<KEY_TYPE, VALU
 	if (left != nullptr) {
 		return left->last();
 	}
-	Node* node = this->parent;
 	Node* prev = this;
+	Node* node = parent;
 	while (node != nullptr && prev == node->left) {
 		prev = node;
 		node = node->parent;
